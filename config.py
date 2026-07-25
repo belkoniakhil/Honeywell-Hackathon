@@ -1,77 +1,25 @@
-"""
-config.py
----------
-
-Central configuration module for the Honeywell Autonomous
-Production Choke Controller project.
-
-This file contains ONLY configuration.
-
-It must NEVER contain:
-
-- Simulator logic
-- Controller logic
-- Mathematical equations
-- Plotting code
-
-Every module in the project should read configuration
-from this file instead of hardcoding constants.
-"""
-
 from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
 class SimulationConfig:
-    """
-    Immutable configuration for the entire simulation.
 
-    All simulator behaviour should be configurable from here.
-    """
-
-    # ==========================================================
-    # Simulation Settings
-    # ==========================================================
-
-    # Time between two simulation steps (seconds)
+    # Simulation
     time_step: float
-
-    # Total simulation duration (seconds)
     simulation_time: float
-
-    # Random seed (used when noise is enabled)
     random_seed: int
-
-    # Enable / Disable sensor noise
     enable_noise: bool
 
-    # ==========================================================
-    # Choke Limits
-    # ==========================================================
-
-    # Minimum choke opening (%)
+    # Choke
     min_choke: float
-
-    # Maximum choke opening (%)
     max_choke: float
-
-    # Maximum choke movement allowed per simulation step (%)
     max_choke_change: float
 
-    # ==========================================================
-    # Flow Limits
-    # ==========================================================
-
-    # Minimum oil production
+    # Flow
     min_flow: float
-
-    # Maximum oil production
     max_flow: float
 
-    # ==========================================================
-    # Pressure Limits
-    # ==========================================================
-
+    # Pressure
     min_whp: float
     max_whp: float
 
@@ -81,41 +29,19 @@ class SimulationConfig:
     min_bhp: float
     max_bhp: float
 
-    # ==========================================================
-    # Dynamic Behaviour
-    # ==========================================================
-
-    # Response speed of flow
+    # Dynamics
     flow_time_constant: float
-
-    # Response speed of pressures
     pressure_time_constant: float
 
-    # ==========================================================
-    # Initial Well State
-    # ==========================================================
-
+    # Initial State
     initial_flow: float
-
     initial_whp: float
-
     initial_flp: float
-
     initial_bhp: float
-
     initial_choke: float
 
     @classmethod
     def default(cls):
-        """
-        Creates the default configuration.
-
-        NOTE:
-        These values are temporary placeholders.
-
-        Later we will calibrate them using
-        the Honeywell sample dataset.
-        """
 
         return cls(
 
@@ -134,26 +60,24 @@ class SimulationConfig:
             min_flow=0.0,
             max_flow=200.0,
 
-            # WHP
-            min_whp=1000.0,
-            max_whp=4000.0,
+            # Pressure
+            min_whp=200.0,
+            max_whp=300.0,
 
-            # FLP
-            min_flp=50.0,
-            max_flp=500.0,
+            min_flp=150.0,
+            max_flp=200.0,
 
-            # BHP
-            min_bhp=1500.0,
-            max_bhp=5000.0,
+            min_bhp=2800.0,
+            max_bhp=3200.0,
 
             # Dynamics
             flow_time_constant=8.0,
             pressure_time_constant=10.0,
 
             # Initial State
-            initial_flow=100.0,
-            initial_whp=2500.0,
-            initial_flp=180.0,
-            initial_bhp=3000.0,
+            initial_flow=92.57,
+            initial_whp=262.20,
+            initial_flp=186.12,
+            initial_bhp=3080.59,
             initial_choke=30.0,
         )

@@ -4,18 +4,19 @@ app.py
 Honeywell Autonomous Production Optimizer Dashboard
 
 Presentation Layer
+------------------
+Runs simulation scenarios and visualizes:
 
-Responsibilities
-----------------
-• Execute simulation scenarios
-• Display live KPIs
-• Display process trends
-• Display controller metrics
-• Display controller decisions
-• Provide report downloads
+• Live KPIs
+• Process Trends
+• Controller Performance
+• Controller Decision
+• Safety Status
+• Scenario Summary
+• Optimization Explorer
+• Downloads
 
-NOTE:
-No simulation logic should exist in this file.
+No simulation logic exists in this file.
 """
 
 import sys
@@ -37,20 +38,18 @@ if str(ROOT) not in sys.path:
 import streamlit as st
 
 # ---------------------------------------------------------
-# Dashboard Components
+# Components
 # ---------------------------------------------------------
 
 from components.sidebar import render_sidebar
-from components.metrics_panel import render_metrics
-from components.optimizer_table import render_optimizer_table
 from components.kpi_cards import render_kpis
 from components.charts import render_charts
+from components.metrics_panel import render_metrics
 from components.decision_panel import render_decision
+from components.status_panel import render_status
+from components.summary_panel import render_summary
 from components.download_panel import render_downloads
-# Coming Next
-# from components.metrics_panel import render_metrics
-# from components.download_panel import render_downloads
-# from components.status_panel import render_status
+from components.optimizer_panel import render_optimizer_panel
 
 # ---------------------------------------------------------
 # Page Configuration
@@ -62,6 +61,24 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# ---------------------------------------------------------
+# Load CSS
+# ---------------------------------------------------------
+
+css_file = Path(__file__).parent / "styles" / "style.css"
+
+if css_file.exists():
+
+    with open(css_file) as f:
+
+        st.markdown(
+
+            f"<style>{f.read()}</style>",
+
+            unsafe_allow_html=True,
+
+        )
 
 # ---------------------------------------------------------
 # Header
@@ -104,7 +121,7 @@ else:
     st.success(f"✅ Simulation Completed • {scenario}")
 
     # -----------------------------------------------------
-    # Live KPIs
+    # KPI Cards
     # -----------------------------------------------------
 
     render_kpis(
@@ -122,14 +139,10 @@ else:
     )
 
     # -----------------------------------------------------
-    # Bottom Dashboard
+    # Performance + Decision
     # -----------------------------------------------------
 
     left, right = st.columns([2, 1])
-
-    # -------------------------------
-    # Performance
-    # -------------------------------
 
     with left:
 
@@ -138,56 +151,46 @@ else:
             target,
         )
 
-        st.metric(
-            "RMSE",
-            f"{metrics.rmse(target):.3f}",
-        )
-
-        st.metric(
-            "Maximum Error",
-            f"{metrics.max_error(target):.3f}",
-        )
-
-        st.metric(
-            "Steady-State Error",
-            f"{metrics.steady_state_error(target):.3f}",
-        )
-
-        st.metric(
-            "Overshoot",
-            f"{metrics.overshoot(target):.3f}",
-        )
-
-    # -------------------------------
-    # Decision Panel
-    # -------------------------------
-
     with right:
 
         render_decision(
             optimizer,
         )
-        st.divider()
 
-        render_optimizer_table(
-            optimizer,
+    # -----------------------------------------------------
+    # Safety + Summary
+    # -----------------------------------------------------
+
+    left, right = st.columns(2)
+
+    with left:
+
+        render_status(
+            history,
+            target,
+        )
+
+    with right:
+
+        render_summary(
+            history,
+            target,
+            scenario,
         )
 
     # -----------------------------------------------------
-    # Placeholder Row
+    # Optimization Explorer
     # -----------------------------------------------------
 
-    left2, right2 = st.columns([2, 1])
+    render_optimizer_panel(
+        optimizer,
+    )
 
-    with left2:
+    # -----------------------------------------------------
+    # Downloads
+    # -----------------------------------------------------
 
-        st.subheader("📈 System Status")
-
-        st.success("🟢 Simulation completed successfully.")
-
-    with right2:
-
-            render_downloads()
+    render_downloads()
 
     # -----------------------------------------------------
     # Footer
@@ -196,6 +199,11 @@ else:
     st.divider()
 
     st.caption(
+
         f"Scenario : {scenario} | "
+
+        f"Target : {target:.1f} bbl/hr | "
+
         f"Recorded States : {len(history.states)}"
+
     )

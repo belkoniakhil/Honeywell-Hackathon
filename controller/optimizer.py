@@ -63,10 +63,14 @@ class Optimizer:
 
         # Stores last optimization result
         self.last_decision = None
+        # Stores every evaluated candidate
+        self.search_history = []
 
     def optimize(self, state, target_flow):
 
         current_choke = state.choke
+        # Clear previous optimization history
+        self.search_history.clear()
         self.last_candidates = []
         best_cost = float("inf")
         best_choke = current_choke
@@ -100,7 +104,19 @@ class Optimizer:
                 or prediction["bhp"] < self.MIN_BHP
                 or prediction["bhp"] > self.MAX_BHP
             ):
+                self.search_history.append({
+                    "choke": choke,
+                    "predicted_flow": prediction["flow"],
+                    "tracking_cost": None,
+                    "pressure_cost": None,
+                    "movement_cost": None,
+                    "total_cost": None,
+                    "safe": False,
+                    "selected": False,
+                })
+
                 continue
+               
 
             candidate_found = True
 
@@ -156,6 +172,16 @@ class Optimizer:
                 + self.w_pressure * pressure_cost
                 + self.w_movement * movement_cost
             )
+            self.search_history.append({
+                "choke": choke,
+                "predicted_flow": predicted_flow,
+                "tracking_cost": tracking_cost,
+                "pressure_cost": pressure_cost,
+                "movement_cost": movement_cost,
+                "total_cost": total_cost,
+                "safe": True,
+                "selected": False,
+            })
             self.last_candidates.append(
                         {
                             "choke": choke,
@@ -207,7 +233,11 @@ class Optimizer:
                 "total_cost": float("inf"),
                 "warning": "No safe operating point found.",
             }
+        for candidate in self.search_history:
 
+            if candidate["choke"] == best_choke:
+
+                candidate["selected"] = True   
         self.last_decision = best_decision
 
         return best_choke

@@ -1,0 +1,59 @@
+/* ---------- Main Container ---------- */
+
+.block-container{
+    padding-top:1rem;
+    padding-bottom:2rem;
+}
+
+/* ---------- KPI Cards ---------- */
+
+[data-testid="stMetric"]{
+    background:#1F2937;
+    border:1px solid #333;
+    border-radius:12px;
+    padding:15px;
+}
+
+/* ---------- Headings ---------- */
+
+h1{
+    color:#E4002B;
+}
+
+h2,h3{
+    color:white;
+}
+
+/* ---------- Sidebar ---------- */
+
+section[data-testid="stSidebar"]{
+    background:#151A23;
+}
+
+/* ---------- Tables ---------- */
+
+[data-testid="stDataFrame"]{
+    border-radius:12px;
+}
+
+/* ---------- Buttons ---------- */
+
+.stButton>button{
+
+    width:100%;
+
+    border-radius:10px;
+
+    background:#E4002B;
+
+    color:white;
+
+    border:none;
+}
+
+.stButton>button:hover{
+
+    background:#C40025;
+
+    color:white;
+}

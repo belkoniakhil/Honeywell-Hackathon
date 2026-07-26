@@ -1,10 +1,25 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 
-results/
+# Virtual Environments
+.venv/
+venv/
+env/
 
+# IDE
 .vscode/
-
 .idea/
 
-.env
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated Results
+results/
+
+# Streamlit
+.streamlit/

@@ -150,7 +150,7 @@ class PlotGenerator:
         plt.plot(times, flp, linewidth=2)
 
         plt.title("Flowline Pressure (FLP)")
-        plt.xlabel("Time (s)")
+        plt.xlabel("Time (hr)")
         plt.ylabel("Pressure")
         plt.grid(True)
 

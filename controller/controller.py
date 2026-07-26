@@ -7,7 +7,8 @@ Responsibilities
 ----------------
 1. Receive the current well state.
 2. Ask the optimizer for the best choke position.
-3. Return the selected choke.
+3. Apply choke rate limiting.
+4. Return the final choke position.
 """
 
 from controller.predictor import Predictor
@@ -27,12 +28,30 @@ class AutonomousController:
             self.predictor,
         )
 
+        # Maximum choke movement per controller decision
+        self.MAX_CHOKE_STEP = 5
+
     def decide(self, state, target_flow):
         """
-        Compute the next choke position.
+        Compute the next choke position while limiting
+        choke movement to ±5%.
         """
 
-        return self.optimizer.optimize(
+        # Optimizer returns only the target choke
+        target_choke = self.optimizer.optimize(
             state,
             target_flow,
         )
+
+        current_choke = state.choke
+
+        # Apply movement limiter
+        delta = target_choke - current_choke
+
+        if delta > self.MAX_CHOKE_STEP:
+            target_choke = current_choke + self.MAX_CHOKE_STEP
+
+        elif delta < -self.MAX_CHOKE_STEP:
+            target_choke = current_choke - self.MAX_CHOKE_STEP
+
+        return target_choke

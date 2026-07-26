@@ -144,7 +144,7 @@ def render_charts(history, target):
 
         title="Pressure Trends",
 
-        xaxis_title="Time (s)",
+        xaxis_title="Time (hr)",
 
         yaxis_title="Pressure (psi)",
 

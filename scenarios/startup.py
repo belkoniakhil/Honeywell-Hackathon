@@ -28,13 +28,12 @@ class StartupScenario:
         print("=" * 70)
 
         for _ in range(60):
-
             choke = controller.decide(
-                state,
-                target,
+            state,
+            target,
             )
 
-            state = simulator.step(choke)
+            state = simulator.step(choke)        
 
             print(
                 f"t={state.time:4.0f}s | "

@@ -116,5 +116,79 @@ class PlotGenerator:
         )
 
         plt.close()
+                # ===================================================
+        # WHP Plot
+        # ===================================================
+
+        plt.figure(figsize=(10, 5))
+
+        plt.plot(times, whp, linewidth=2)
+
+        plt.title("Wellhead Pressure (WHP)")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Pressure")
+        plt.grid(True)
+
+        plt.tight_layout()
+
+        plt.savefig(
+            os.path.join(
+                output_folder,
+                "whp_vs_time.png",
+            ),
+            dpi=300,
+        )
+
+        plt.close()
+
+        # ===================================================
+        # FLP Plot
+        # ===================================================
+
+        plt.figure(figsize=(10, 5))
+
+        plt.plot(times, flp, linewidth=2)
+
+        plt.title("Flowline Pressure (FLP)")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Pressure")
+        plt.grid(True)
+
+        plt.tight_layout()
+
+        plt.savefig(
+            os.path.join(
+                output_folder,
+                "flp_vs_time.png",
+            ),
+            dpi=300,
+        )
+
+        
+
+        # ===================================================
+        # BHP Plot
+        # ===================================================
+
+        plt.figure(figsize=(10, 5))
+
+        plt.plot(times, bhp, linewidth=2)
+
+        plt.title("Bottom Hole Pressure (BHP)")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Pressure")
+        plt.grid(True)
+
+        plt.tight_layout()
+
+        plt.savefig(
+            os.path.join(
+                output_folder,
+                "bhp_vs_time.png",
+            ),
+            dpi=300,
+        )
+
+        plt.close()
 
         return output_folder

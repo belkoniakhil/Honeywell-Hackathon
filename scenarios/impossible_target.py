@@ -18,7 +18,7 @@ class ImpossibleTargetScenario:
         )
 
         controller = AutonomousController(simulator)
-
+        simulator.controller = controller
         state = simulator.reset()
 
         target = 180

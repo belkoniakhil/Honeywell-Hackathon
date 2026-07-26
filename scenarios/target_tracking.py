@@ -18,7 +18,7 @@ class TargetTrackingScenario:
         )
 
         controller = AutonomousController(simulator)
-
+        simulator.controller = controller
         state = simulator.reset()
 
         targets = [
